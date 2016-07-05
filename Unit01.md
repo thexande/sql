@@ -1,9 +1,9 @@
 # Getting Started with SQL
 
-### Install postgres : 
+### Install postgres :
 -brew install postgres
 
--Heed the post-install notes. There may be something like: 
+-Heed the post-install notes. There may be something like:
   "To have launchd start postgresql at login:"
   <blockquote>
         ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
@@ -13,21 +13,21 @@
   <blockquote>
     launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
   </blockquote>
-  
-But most importantly, you should run : 
+
+But most importantly, you should run :
 
 <blockquote>
  postgres -D /usr/local/var/postgres
 </blockquote>
 
-Running brew info postgres can help you see what your options are after the setup screens are gone. 
+Running brew info postgres can help you see what your options are after the setup screens are gone.
 
-### If your postgres connection ever dies or goes bad, you can restart postgres with this command: 
+### If your postgres connection ever dies or goes bad, you can restart postgres with this command:
 <blockquote>
   pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
 </blockquote>
 
-sometimes if you get a stale postgres session, you can delete your postmaster.pid file: 
+sometimes if you get a stale postgres session, you can delete your postmaster.pid file:
 ```
 rm /usr/local/var/postgres/postmaster.pid
 
@@ -35,7 +35,7 @@ rm /usr/local/var/postgres/postmaster.pid
 
 
 Now Postgres should be running.  
-You can check to see whether or not psql is running by looking at all system processes related to postgres: 
+You can check to see whether or not psql is running by looking at all system processes related to postgres:
 <blockquote>
         ps aux | grep postgres
 </blockquote>
@@ -46,49 +46,49 @@ You can check to see whether or not psql is running by looking at all system pro
 
 notice that the last matching "process" is actually the search we just did, so ruling that one out, we have two matching processes.  
 
-Every once in a while, you may get this error is there are version mismatches: 
+Every once in a while, you may get this error is there are version mismatches:
 http://blog.10ninox.com/2015/01/psql-database-incompatible/
 
 
-To get into the psql terminal as the default user, type: 
+To get into the psql terminal as the default user, type:
 <blockquote>
-      psql postgres 
+      psql postgres
 </blockquote>
 
-You should now see a command prompt.: 
+You should now see a command prompt.:
 <blockquote>
-        postgres=# 
+        postgres=#
 </blockquote>
 
 🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘🐘first milestone.
 
 
-In the terminal now, we can see the defaults that ship with postgres, but we don't have any user created databases yet. 
+In the terminal now, we can see the defaults that ship with postgres, but we don't have any user created databases yet.
 
-### list databases: 
+### list databases:
 <blockquote>
   \l
 </blockquote>
 (backslash and then the letter “l” as in lemon)
 
-Use the above command to list the current databases. 
+Use the above command to list the current databases.
 
-Now , create a new database with the command below: 
+Now , create a new database with the command below:
 
-### create database: 
+### create database:
 <blockquote>
-  CREATE DATABASE mydatabase; 
+  CREATE DATABASE mydatabase;
 </blockquote>
 
-Now list your databases again, and you should see the database that you created. 
+Now list your databases again, and you should see the database that you created.
 
-Once we've created a database, even if its empty, we have to "connect" to it in order to do queries: 
+Once we've created a database, even if its empty, we have to "connect" to it in order to do queries:
 
-### connect to a database: 
-\c mydatabase 
+### connect to a database:
+\c mydatabase
 
 
-Even though we don't want to drop the database yet, later we can drop it with this command: 
+Even though we don't want to drop the database yet, later we can drop it with this command:
 ### drop database:
 DROP DATABASE demodb1;
 
@@ -98,37 +98,37 @@ DROP DATABASE demodb1;
 To exit the postgres cli ( command line interface) , do
 \q
 
-We can import a database from the standard bash window. 
+We can import a database from the standard bash window.
 
-Navigate to where world.sql is stored ( it should be in the repo you cloned). 
+Navigate to where world.sql is stored ( it should be in the repo you cloned).
 
-### import a database (OUTSIDE of the psql command prompt, from terminal ) : 
+### import a database (OUTSIDE of the psql command prompt, from terminal ) :
 <blockquote>
   psql mydatabase < world.sql
 </blockquote>
 
-OR 
-psql mydatabase < ~/path/to/file/world.sql  ( if you're in a different directory) . 
+OR
+psql mydatabase < ~/path/to/file/world.sql  ( if you're in a different directory) .
 
 ### dump (export) a database: (outside of the psql command prompt, from terminal ) :
 Although we will not be using it now, we can also dump from the terminal:
 pg_dump mydatabase > new_file_name.sql
 
 
-Ok, so now we can go back into the terminal and view our data. 
+Ok, so now we can go back into the terminal and view our data.
 <blockquote>
         psql postgres
 </blockquote>
 
 
-### connect to the database we want: 
+### connect to the database we want:
 <blockquote>
     \c world
 </blockquote>
 
 ### describe tables:
 <blockquote>
-    \dt 
+    \dt
 </blockquote>
 
 ### describe one table:
@@ -139,29 +139,29 @@ Ok, so now we can go back into the terminal and view our data.
 ### alter a table:
 ALTER TABLE foo ADD COLUMN id;
 
-### create a database table with an auto-incrementer: 
+### create a database table with an auto-incrementer:
 CREATE TABLE users (id SERIAL, name TEXT, age INT);
 
-### alter a table with an auto-incrementing column 
+### alter a table with an auto-incrementing column
 ALTER TABLE foo ADD COLUMN id SERIAL;
 
 
-Now , we are ready to start doing some queries. 
-All of these queries can be run in the psql cli. 
-However, the cli is not a great tool when it comes to viewing large tables or large amounts of data. 
+Now , we are ready to start doing some queries.
+All of these queries can be run in the psql cli.
+However, the cli is not a great tool when it comes to viewing large tables or large amounts of data.
 
-To do this, we can install a gui tool. For this lesson, we will use PGCommander. 
-PGCommander is useful because not only is it cleaner than using the psql cli, it allows you to export and save queries. 
-We will use PGCommander for you to email saved queries to the instructor. 
+To do this, we can install a gui tool. For this lesson, we will use PGCommander.
+PGCommander is useful because not only is it cleaner than using the psql cli, it allows you to export and save queries.
+We will use PGCommander for you to email saved queries to the instructor.
 <br>
 
-Here are some ways that we can do CRUD in SQL : 
+Here are some ways that we can do CRUD in SQL :
 
-##QUERIES: 
+##QUERIES:
 
 ###Insert
 <blockquote>
-  INSERT into tbl values('fred', 'scott', 'denver', 'colorado'); 
+  INSERT into tbl values('fred', 'scott', 'denver', 'colorado');
 </blockquote>
 <blockquote>
   INSERT into tbl ('name', 'city') values ('fred', 'denver');
@@ -169,16 +169,16 @@ Here are some ways that we can do CRUD in SQL :
 
 ##Select
 <blockquote>
-  SELECT * from tbl; 
+  SELECT * from tbl;
 </blockquote>
 <blockquote>
-SELECT * from tbl WHERE column_name  = ‘desired_value’ ; 
+SELECT * from tbl WHERE column_name  = ‘desired_value’ ;
 </blockquote>
 <blockquote>
 SELECT name from tbl where weight = (select max(weight) from tbl)
 </blockquote>
 <blockquote>
-SELECT name from products where price > 5.00 
+SELECT name from products where price > 5.00
 </blockquote>
 
 
@@ -189,7 +189,7 @@ SELECT name from products where price > 5.00
 
 ##Delete
 <blockquote>
-  DELETE from country WHERE code='SSD' ; 
+  DELETE from country WHERE code='SSD' ;
 </blockquote>
 
 ##JOIN
@@ -201,7 +201,7 @@ SELECT customer.tag as customer_tag, purchase.tag as purchase_tag from customers
 </blockquote>
 More info on joins can be found in Unit02
 <blockquote>
-- CREATING A NEW TABLE 
+- CREATING A NEW TABLE
 CREATE TABLE Persons
 (
 PersonID int,
@@ -223,31 +223,45 @@ http://www.postgresql.org/docs/9.1/static/datatype.html
 ### South Sudan data:
 'SSD', 'South Sudan', 'Africa', 'Eastern Africa', 193, 2014, 193000, 72, 5796, 400, 'South Sudan', 'Federal Presidential Republic', 'Salva Kiir Mayardit', 4075, 'SS';
 
- 
 
 
-##EXERCISES: 
 
-PLEASE LOCALLY SAVE all of your queries after inserting them. 
+##EXERCISES:
 
-Since this data was created, a new country, South Sudan, is now part of the global map.  Using the above "South Sudan data", 
-add South Sudan to the list of countries. 
+PLEASE LOCALLY SAVE all of your queries after inserting them.
 
+Since this data was created, a new country, South Sudan, is now part of the global map.  Using the above "South Sudan data",
+add South Sudan to the list of countries.
+``` sql
+insert into country values('SSD', 'South Sudan', 'Africa', 'Eastern Africa', 193, 2014, 193000, 72, 5796, 400, 'South Sudan', 'Federal Presidential Republic', 'Salva Kiir Mayardit', 4075, 'SS');
+```
 Insert a new country called "Atlantis", using modified South Sudan data. Make the country code "ATL" , and an  independence date of 1
-
+``` sql
+insert into country values('ATL', 'Atlantis', 'Africa', 'Eastern Africa', 193, 1, 193000, 72, 5796, 400, 'South Sudan', 'Federal Presidential Republic', 'Salva Kiir Mayardit', 4075, 'SS');
+```
 Update Atlantis after you create it changing the to "ATS" and changing the independence date to 2015
-
+```sql
+UPDATE country SET code = 'ATS', indepyear = 2015 WHERE name = 'Atlantis';
+```
 Select all countries who have more than 156 million people
-
-Select the country wtih the highest gross national product 
-
-Select all of the countries and their capitals in one query 
-
+```sql
+SELECT * FROM country WHERE population > 156000000;
+```
+Select the country wtih the highest gross national product
+```sql
+SELECT * FROM country WHERE gnp = (SELECT max(gnp) FROM country);
+```
+Select all of the countries and their capitals in one query
+```sql
+SELECT country.name, city.name FROM country JOIN city ON country.capital = city.id;
+```
 Delete Atlantis from the country table
+```sql
+DELETE FROM country WHERE name='Atlantis';
+```
 
 
-
-TABLE CREATION EXAMPLES: 
+TABLE CREATION EXAMPLES:
 ----------------
 CREATE TABLE drivers ( id  int,  name varchar(255), motorcycle_id int );
 
@@ -260,11 +274,6 @@ CREATE TABLE zone ( id int, name varchar(255) );
 CREATE TABLE users (id SERIAL, name TEXT, age INT);
 
 -----------
-optional : 
+optional :
 
 COPY drivers FROM '/Users/nmuta/Documents/drivers.csv' DELIMITER ',' CSV;
-
-
-
-
-
